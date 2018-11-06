@@ -1,52 +1,76 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Welcome to Vue</title>
+  <title>Hex Clock in Vue</title>
   <script src="https://unpkg.com/vue"></script>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      font-family: 'Roboto', 'Helvetica Neue', Helvetica, sans-serif;
+      font-size: 48px;
+      color: #fff;
+    }
+
+    .small {
+      font-size: 14px;
+      text-align: center;
+    }
+  </style>
 </head>
+
 <body>
-  <div id="app">
-    <img src="https://vuejs.org/images/logo.png" alt="Vue logo">
-    <h1>{{ greeting }}</h1>
-    <ul>
-      <li>
-        To learn more about Vue, visit
-        <a :href="docsURL" target="_blank">
-          {{ humanizeURL(docsURL) }}
-        </a>
-      </li>
-      <li>
-        For live help with simple questions, check out
-        <a :href="discordURL" target="_blank">
-          the Discord chat
-        </a>
-      </li>
-      <li>
-        For more complex questions, post to
-        <a :href="forumURL" target="_blank">
-          the forum
-        </a>
-      </li>
-    </ul>
+  <div id="app" class="container" :style="{ backgroundColor: bgc}">
+    <div class="clock">
+      <p class="small">Hex Clock</p>
+      <span class="hours">{{h}}</span>:<span class="minutes">{{m}}</span>:<span class="seconds">{{s}}</span>
+      <p class="small">{{ bgc }}</p>
+    </div>
   </div>
 
   <script>
     var app = new Vue({
       el: '#app',
-      data: {
-        greeting: 'Welcome to your Vue.js app!',
-        docsURL: 'http://vuejs.org/guide/',
-        discordURL: 'https://chat.vuejs.org',
-        forumURL: 'http://forum.vuejs.org/'
+      props: {
+        d: null,
+        h: 0,
+        m: 0,
+        s: 0,
+        bgc: ''
+      },
+      mounted: function () {
+        setInterval(this.setDate, 1000)
       },
       methods: {
-        humanizeURL: function (url) {
-          return url
-            .replace(/^https?:\/\//, '')
-            .replace(/\/$/, '')
+        setDate: function () {
+          let d = 0, h = 0, m = 0, s = 0
+          d = new Date
+          h = d.getHours()
+          m = d.getMinutes()
+          s = d.getSeconds()
+
+          if (h <= 9) h = '0' + h
+          if (m <= 9) m = '0' + m
+          if (s <= 9) s = '0' + s
+
+          this.bgc = '#' + h + m + s
+          this.h = h;
+          this.m = m;
+          this.s = s;
         }
       }
     })
   </script>
 </body>
+
 </html>
